@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 import { withStyles, TextField } from '@material-ui/core';
 import { withRouter } from "react-router-dom";
-import { connect } from 'react-redux';
-
-import { userActions } from '../../actions';
 import Logo from "../../assets/logo-goku.png";
 import { Form, Container } from "./styles";
 
@@ -15,34 +12,21 @@ const styles = theme => ({
   }
 });
 
-class Login extends Component {
+class Address extends Component {
   state = {
-    user: {
-      userName: "",
-      password: "",
-    },
+    userName: "",
+    password: "",
     error: ""
   };
 
-  handleChange = e => {
-    const { name, value } = e.target;
-    const { user } = this.state;
-    this.setState({
-        user: {
-            ...user,
-            [name]: value
-        }
-    });
-  }
-
   handleLogin = e => {
     e.preventDefault();
-    const { user } = this.state;
+    const { userName, password } = this.state;
     
-    if (!user.userName || !user.password) {
+    if (!userName || !password) {
       this.setState({ error: "Preencha usuário e senha para continuar!" });
     } else {                        
-      this.props.login(user);  
+                
     }
   }
 
@@ -62,21 +46,10 @@ class Login extends Component {
           <TextField
             className={classes.input}
             id="userName"
-            name="userName"
             type="text"
             variant="outlined"
             placeholder="Usuário"
-            onChange={e => this.handleChange(e)}
-            fullWidth
-          />
-          <TextField
-            className={classes.input}
-            id="password"
-            name="password"
-            type="password"
-            variant="outlined"
-            placeholder="Senha"
-            onChange={e => this.handleChange(e)}
+            onChange={e => this.setState({ userName: e.target.value })}
             fullWidth
           />
           <button type="submit">Entrar</button>
@@ -87,14 +60,4 @@ class Login extends Component {
   }
 }
 
-function mapState(state) {
-  const { loggingIn } = state.authentication;
-  return { loggingIn };
-}
-
-const actionCreators = {
-  login: userActions.login,
-  logout: userActions.logout
-};
-
-export default withStyles(styles, {withTheme: true})(withRouter(connect(mapState, actionCreators)(Login)));
+export default withStyles(styles, {withTheme: true})(withRouter(Address));
