@@ -4,15 +4,13 @@ import { history } from './configs';
 import { userConstants } from './constants';
 import Login from "./pages/Login";
 import SigIn from "./pages/SignIn";
-import Address from "./pages/Address";
-
-export const isAuthenticated = () => localStorage.getItem(userConstants.TOKEN_KEY) !== null;
+import Layout from "./components/Layout";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-      isAuthenticated() ? (
+      localStorage.getItem(userConstants.TOKEN_KEY) !== null ? (
         <Component {...props} />
       ) : (
         <Redirect to={{ pathname: "/", state: { from: props.location } }} />
@@ -26,7 +24,7 @@ const Routes = () => (
     <Switch>
       <Route exact path="/" component={Login} />
       <Route path="/register" component={SigIn} />
-      <PrivateRoute path="/app" component={Address} />
+      <PrivateRoute path="/app" component={Layout} />
       <Route path="*" component={() => <h1>Page not found</h1>} />
     </Switch>
   </Router>

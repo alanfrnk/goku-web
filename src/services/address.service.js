@@ -1,37 +1,15 @@
 import { api } from '../configs';
 
-export const userService = {
-  login,
-  logout,
+export const addressService = {
   register,
   update,
   getAll,
   delete: _delete,
 };
 
-function login(user) {
-  return new Promise((resolve, reject) => {
-    api.post('/user/login', user).then(response => { 
-      if (!response.data.success) {
-        const error = (response.data && response.data.error) || response.statusText;
-        reject(error);
-      } else {
-        resolve(response.data);
-      }
-    })
-    .catch(err => {
-      reject(err);
-    });
-  });
-}
-
-function logout() {
-  localStorage.removeItem('user');
-}
-
-function register(user) {
+function register(address) {
   return new Promise((resolve, reject) => {        
-    api.post('/user/register', user).then(response => {
+    api.post('/address/', address).then(response => {
       if (!response.data.success) {
         const error = (response.data && response.data.error) || response.statusText;
         reject(error);
@@ -47,7 +25,7 @@ function register(user) {
 
 function getAll() {
   return new Promise((resolve, reject) => {
-    api.get('/user/').then(response => {
+    api.get('/address/').then(response => {
       if (!response.data.success) {
         const error = (response.data && response.data.error) || response.statusText;
         reject(error);
@@ -61,9 +39,9 @@ function getAll() {
   });
 }
 
-function update(user) {
+function update(address) {
   return new Promise((resolve, reject) => {
-    api.put(`/user/${user._id}`, user).then(response => {
+    api.put(`/address/${address._id}`, address).then(response => {
       if (!response.data.success) {
         const error = (response.data && response.data.error) || response.statusText;
         reject(error);
@@ -76,7 +54,7 @@ function update(user) {
 
 function _delete(id) {
   return new Promise((resolve, reject) => {
-    api.delete(`/user/${id}`).then(response => {
+    api.delete(`/address/${id}`).then(response => {
       if (!response.data.success) {
         const error = (response.data && response.data.error) || response.statusText;
         reject(error);

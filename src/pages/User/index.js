@@ -7,7 +7,7 @@ import AddIcon from '@material-ui/icons/Add';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 
-import { addressActions } from '../../actions';
+import { userActions } from '../../actions';
 
 const styles = theme => ({
   fab: {
@@ -39,64 +39,24 @@ const columns = [
     }
   },
   {
-    name: "zipCode",
-    label: "Cep",
+    name: "firstName",
+    label: "Nome",
     options: {
       filter: true,
       sort: true,
     }
   },
   {
-    name: "street",
-    label: "Rua",
+    name: "lastName",
+    label: "Sobrenome",
     options: {
       filter: true,
       sort: true,
     }
   },
   {
-    name: "number",
-    label: "Número",
-    options: {
-      filter: true,
-      sort: true,
-    }
-  },
-  {
-    name: "complement",
-    label: "Complemento",
-    options: {
-      filter: true,
-      sort: true,
-    }
-  },
-  {
-    name: "district",
-    label: "Bairro",
-    options: {
-      filter: true,
-      sort: true,
-    }
-  },
-  {
-    name: "city",
-    label: "Cidade",
-    options: {
-      filter: true,
-      sort: true,
-    }
-  },
-  {
-    name: "state",
-    label: "Estado",
-    options: {
-      filter: true,
-      sort: true,
-    }
-  },
-  {
-    name: "country",
-    label: "País",
+    name: "userName",
+    label: "Usuário",
     options: {
       filter: true,
       sort: true,
@@ -104,7 +64,7 @@ const columns = [
   },
 ];
 
-class Address extends Component {
+class User extends Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
@@ -122,31 +82,24 @@ class Address extends Component {
       },
       rowData: {
         _id: '',
-        zipCode: '',
-        street: '',
-        number: '',
-        complement: '',
-        district: '',
-        city: '',
-        state: '',
-        country: '',
+        firstName: '',
+        lastName: '',
+        userName: '',
+        password: ''
       },
       error: ''
     };
   }
 
   componentDidMount = () => {
-    this.props.getAdresses();
+    this.props.getUsers();
   }
 
   componentDidUpdate = (prevProps, prevState) => {
-    const { adresses } = this.props;
+    const { users } = this.props;
 
-    if(prevProps.adresses !== adresses) {
-      this.setState({ 
-        data: adresses.items ? adresses.items : [],
-        loading: false 
-      })
+    if(prevProps.users !== users) {
+      this.setState({ data: users.items ? users.items : [] })
     }
   }
 
@@ -155,7 +108,7 @@ class Address extends Component {
       const { data } = this.state;
     
       rowsDeleted.data.forEach(element => {
-        this.props.deleteAddress(data[element.index]._id);
+        this.props.deleteUser(data[element.index]._id);
       });
     } catch (err) {
       console.log(err);
@@ -165,14 +118,10 @@ class Address extends Component {
   onRowClick = (rowData) => {
     let formatedRow = {
       _id: rowData[0],
-      zipCode: rowData[1],
-      street: rowData[2],
-      number: rowData[3],
-      complement: rowData[4],
-      district: rowData[5],
-      city: rowData[6],
-      state: rowData[7],
-      country: rowData[8],
+      firstName: rowData[1],
+      lastName: rowData[2],
+      userName: rowData[3],
+      password: '',
     }
     this.setState({ open: true, rowData: formatedRow });
   }
@@ -190,20 +139,20 @@ class Address extends Component {
     this.setState({ rowData: _.set({...this.state.rowData}, event.target.name, event.target.value) });
   }
 
-  addAddress = async (rowData) => {
+  addUser = async (rowData) => {
     await this.props.register(rowData, true);
 
     setTimeout(() => {
-      this.props.getAdresses();
+      this.props.getUsers();
       this.setState({ open: false });
     }, 500);
   }
 
-  updateAddress = async (rowData) => {
-    await this.props.updateAddress(rowData);
+  updateUser = async (rowData) => {
+    await this.props.updateUser(rowData);
 
     setTimeout(() => {
-      this.props.getAdresses();
+      this.props.getUsers();
       this.setState({ open: false });
     }, 500);
   }
@@ -214,9 +163,9 @@ class Address extends Component {
     const { rowData } = this.state;
     
     if (!rowData._id) {
-      this.addAddress(rowData);
+      this.addUser(rowData);
     } else {
-      this.updateAddress(rowData);
+      this.updateUser(rowData);
     }
   }
 
@@ -237,7 +186,7 @@ class Address extends Component {
     return(
       <div>
         <MUIDataTable
-          title={"Endereços"}
+          title={"Usuários"}
           data={data}
           columns={columns}
           options={options}
@@ -253,7 +202,7 @@ class Address extends Component {
             onClose={this.handleClose}
             aria-labelledby="form-dialog-title"
           >
-            <DialogTitle id="form-dialog-title">Endereços</DialogTitle>
+            <DialogTitle id="form-dialog-title">Usuários</DialogTitle>
             <DialogContent>
               <DialogContentText color="secondary" align="center">
                 {error}
@@ -261,80 +210,40 @@ class Address extends Component {
               <TextField
                 autoFocus
                 margin="dense"
-                name="zipCode"
-                label="Cep"
+                name="firstName"
+                label="Nome"
                 type="text"
-                value={rowData.zipCode || ''}
+                value={rowData.firstName || ''}
                 variant="outlined"
                 onChange={this.handleChange}
                 fullWidth
               />
               <TextField                                
                 margin="dense"
-                name="street"
-                label="Rua"
+                name="lastName"
+                label="Sobrenome"
                 type="text"
-                value={rowData.street || ''}
+                value={rowData.lastName || ''}
                 variant="outlined"
                 onChange={this.handleChange}                               
                 fullWidth
               />
               <TextField                                
                 margin="dense"
-                name="number"
-                label="Número"
+                name="userName"
+                label="Usuário"
                 type="text"
-                value={rowData.number || ''}
+                value={rowData.userName || ''}
                 variant="outlined"
                 onChange={this.handleChange}
                 fullWidth
               />
               <TextField                                
                 margin="dense"
-                name="complement"
-                label="Complemento"
-                type="text"
-                value={rowData.complement || ''}
-                variant="outlined"
-                onChange={this.handleChange}
-                fullWidth
-              />
-              <TextField                                
-                margin="dense"
-                name="district"
-                label="Bairro"
-                type="text"
-                value={rowData.district || ''}
-                variant="outlined"
-                onChange={this.handleChange}
-                fullWidth
-              />
-              <TextField                                
-                margin="dense"
-                name="city"
-                label="Cidade"
-                type="text"
-                value={rowData.city || ''}
-                variant="outlined"
-                onChange={this.handleChange}
-                fullWidth
-              />
-              <TextField                                
-                margin="dense"
-                name="state"
-                label="Estado"
-                type="text"
-                value={rowData.state || ''}
-                variant="outlined"
-                onChange={this.handleChange}
-                fullWidth
-              />
-              <TextField                                
-                margin="dense"
-                name="country"
-                label="País"
-                type="text"
-                value={rowData.country || ''}
+                name="password"
+                label="Senha"
+                type="password"
+                value={rowData.password || ''}
                 variant="outlined"
                 onChange={this.handleChange}
                 fullWidth
@@ -356,16 +265,17 @@ class Address extends Component {
 }
 
 function mapState(state) {
-  const { adresses } = state;
+  const { users, authentication } = state;
+  const { user } = authentication;
   const { registering } = state.registration;
-  return { adresses, registering };
+  return { user, users, registering };
 }
 
 const actionCreators = {
-  getAdresses: addressActions.getAll,
-  deleteAddress: addressActions.delete,
-  register: addressActions.register,
-  updateAddress: addressActions.update,
+  getUsers: userActions.getAll,
+  deleteUser: userActions.delete,
+  register: userActions.register,
+  updateUser: userActions.update,
 }
 
-export default withStyles(styles)(connect(mapState, actionCreators)(Address));
+export default withStyles(styles)(connect(mapState, actionCreators)(User));

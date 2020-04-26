@@ -43,19 +43,6 @@ export const Form = styled.form`
         margin-top: 20px;
         cursor: pointer;
     }
-    register {
-      color: #000;
-      text-align: center;
-      font-size: 16px;
-      font-weight: bold;
-      background: #fe7f09;
-      height: 56px;
-      border: 0;
-      border-radius: 10px;
-      width: 100%;
-      margin-top: 20px;
-      cursor: pointer;
-    }
     hr {
         margin: 20px 0;
         border: none;
