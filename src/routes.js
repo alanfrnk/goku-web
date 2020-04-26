@@ -4,7 +4,7 @@ import { history } from './configs';
 import { userConstants } from './constants';
 import Login from "./pages/Login";
 import SigIn from "./pages/SignIn";
-import Address from "./pages/Address";
+import Layout from "./components/Layout";
 
 export const isAuthenticated = () => localStorage.getItem(userConstants.TOKEN_KEY) !== null;
 
@@ -26,7 +26,7 @@ const Routes = () => (
     <Switch>
       <Route exact path="/" component={Login} />
       <Route path="/register" component={SigIn} />
-      <PrivateRoute path="/app" component={Address} />
+      <PrivateRoute path="/app" component={Layout} />
       <Route path="*" component={() => <h1>Page not found</h1>} />
     </Switch>
   </Router>

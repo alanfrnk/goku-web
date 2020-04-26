@@ -7,7 +7,9 @@ export const userActions = {
   login,
   logout,
   register,
+  update,
   getAll,
+  delete: _delete,
 };
 
 function login(user) {
@@ -41,7 +43,7 @@ function logout() {
   return { type: userConstants.LOGOUT };
 }
 
-function register(user) {
+function register(user, isInternal) {
   return dispatch => {
     dispatch(request(user));
 
@@ -49,8 +51,10 @@ function register(user) {
       .then(
         user => { 
           dispatch(success());
-          history.push('/');
-          dispatch(alertActions.success('Cadastrado com sucesso'));
+          if (!isInternal) {
+            history.push('/');
+            dispatch(alertActions.success('Cadastrado com sucesso'));
+          }
         },
         error => {
           dispatch(failure(error.toString()));
@@ -78,4 +82,42 @@ function getAll() {
   function request() { return { type: userConstants.GETALL_REQUEST } }
   function success(users) { return { type: userConstants.GETALL_SUCCESS, users } }
   function failure(error) { return { type: userConstants.GETALL_FAILURE, error } }
+}
+
+function _delete(id) {
+  return dispatch => {
+    dispatch(request(id));
+
+    userService.delete(id)
+      .then(
+        user => dispatch(success(id)),
+        error => dispatch(failure(id, error.toString()))
+      );
+  };
+
+  function request(id) { return { type: userConstants.DELETE_REQUEST, id } }
+  function success(id) { return { type: userConstants.DELETE_SUCCESS, id } }
+  function failure(id, error) { return { type: userConstants.DELETE_FAILURE, id, error } }
+}
+
+function update(user) {
+  return dispatch => {
+    dispatch(request(user));
+
+    userService.update(user)
+      .then(
+        user => { 
+          dispatch(success());
+          dispatch(alertActions.success('Cadastro atualizado com sucesso'));
+        },
+        error => {
+          dispatch(failure(error.toString()));
+          dispatch(alertActions.error(error.toString()));
+        }
+      );
+  };
+
+  function request(user) { return { type: userConstants.UPDATE_REQUEST, user } }
+  function success(user) { return { type: userConstants.UPDATE_SUCCESS, user } }
+  function failure(error) { return { type: userConstants.UPDATE_FAILURE, error } }
 }

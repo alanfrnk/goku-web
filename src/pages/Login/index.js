@@ -12,6 +12,19 @@ const styles = theme => ({
     background: 'white',
     borderRadius: '10px',
     marginTop: '20px'
+  },
+  register: {
+    color: '#000',
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
+    background: '#fe7f09',
+    height: 56,
+    border: 0,
+    borderRadius: 10,
+    width: '100%',
+    marginTop: 20,
+    cursor: 'pointer'
   }
 });
 
@@ -80,7 +93,7 @@ class Login extends Component {
             fullWidth
           />
           <button type="submit">Entrar</button>
-          <register register onClick={this.handleRegister}>Cadastrar Usuário</register>
+          <div className={classes.register} onClick={this.handleRegister}>Cadastrar Usuário</div>
         </Form>
       </Container>
     );

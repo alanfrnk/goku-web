@@ -1,5 +1,7 @@
 import axios from "axios";
+import { userConstants, generalConstants } from '../constants';
 
 export const api = axios.create({
-  baseURL: "http://127.0.0.1:3333/api",
+  baseURL: generalConstants.URL_API,
+  headers: { 'x-access-token': localStorage.getItem(userConstants.TOKEN_KEY) }
 });
