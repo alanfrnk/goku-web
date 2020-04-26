@@ -6,13 +6,11 @@ import Login from "./pages/Login";
 import SigIn from "./pages/SignIn";
 import Layout from "./components/Layout";
 
-export const isAuthenticated = () => localStorage.getItem(userConstants.TOKEN_KEY) !== null;
-
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-      isAuthenticated() ? (
+      localStorage.getItem(userConstants.TOKEN_KEY) !== null ? (
         <Component {...props} />
       ) : (
         <Redirect to={{ pathname: "/", state: { from: props.location } }} />

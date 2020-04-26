@@ -9,6 +9,7 @@ import Footer from "../Footer";
 import Logo from "../../assets/logo-goku.png";
 import Address from "../../pages/Address";
 import User from "../../pages/User";
+import { userConstants } from '../../constants';
 
 const drawerWidth = 240;
 
@@ -75,7 +76,7 @@ class Layout extends Component {
     }
 
     clickSair = () => {
-        // logout();
+        localStorage.setItem(userConstants.TOKEN_KEY, null);
         this.props.history.goBack();
     }
 
